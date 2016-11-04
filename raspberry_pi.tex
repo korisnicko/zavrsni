@@ -1,0 +1,32 @@
+\section{Raspberry Pi 2}
+\textit{Raspberry Pi 2} ili \textit{RPi2} je jeftino, malo računalo (veličine kreditne kartice) koje je nastalo u edukacijske svrhe; kako bi ljudi što lakše mogli naučiti programiranje i što lakše razumjeti hardver. Po specifikacijama je nešto sporiji od običnih stolnih (\textit{Desktop}) računala. Koristi \textit{Raspbian Jessie} operativni sustav koji je baziran na \textit{Debian} operativnom sustavu; jednom od distribucija \textit{Linux-a}.\\
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/raspberry.jpg}
+    \caption{Raspberry Pi 2 računalo}
+    \label{fig:mesh1}
+\end{figure}
+\\
+Jedna od najzanimljivijih stvari koje \textit{Raspberry Pi 2} posjeduje su GPIO \footnote{engl. General Putpuse Input/Output (GPIO) - pinovi koji su ugrađeni od strane proizvođača, i omogućuju definiranje pinova kao ulaza, odnosno kao izlaza, prema korisnikovim željama.
+} pinove; koji omogućuju komunikaciju s ostalim ulazno/izlaznim komponentama hardvera (senzori, motori,..), kao i s ostalim \textit{Rasppbery Pi} računalima.\\
+\\
+Princip njihovog rada je naponska logika. Ukoliko je GPIO pin postavljen kao Izlazni pin; tada posjeduje dva stanja, logičku nulu (nema napona) odnosno logičku jedinicu (ima napona). Na sljedećoj slici je prikazan rapsored GPIO pinova. U ovom radu od interesa su GPIO pinovi; a \textit{Raspberry Pi 2} posjeduje sedamnaest takvih pinova.\\
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/pinout.png}
+    \caption{Raspored GPIO pinova}
+    \label{fig:mesh1}
+\end{figure}
+Za kontrolu pinova, odnosno postavljanje pinova kao ulaza ili kao izlaza, koristio se Python programski jezik; kao i biblioteka \texit{RPi.GPIO} \footnote{Biblioteka otvorenog koda, preinstalirana sa Raspbianom i Python kompajlerom. Vidjeti poglavlje OVDE STAVIT BROJ POGLAVLJA}
+\newpage
+Pinovi koje \textit{Raspberry Pi} posjeduje su:
+\begin{itemize}
+    \item Naponski pinovi (2 x 5V, 2 X 3.3V, 5 x GND)
+    \item GPIO x 17\\
+\end{itemize}
+
+Uz GPIO pinove \texit{RPi 2} posjeduje sve potrebne ulaze kao i stolno računalo, pa tako posjeduje i četiri serijska porta; koje ćemo iskoristiti za daljnu komunikaciju s komponentama. \footnote{Komunikacija se ostvaruje preko USB porta sa Arduino Uno 
+kontrolerom. Vidjeti stranicu ARDUINO UNO i SPAJANJE ARDUINA ZA KOMUNIKACIJU}\\
+Za pristup terminalu \textit{Rpi 2} operativnog sustaav korišten je \textit{Putty} \footnote{O PUTIJU} programski alat. Te preko UTP kabela je ostvareno fizičko povezivanje. 

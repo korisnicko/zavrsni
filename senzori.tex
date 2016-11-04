@@ -1,0 +1,27 @@
+\subsection{Senzori HC - SR04}
+Ultrazvučni senzori rade na principu "ispaljivanja" zvuka te osluškivanja njegove jeke. Na slici je prikazana shema spajanja senzora.
+\\[\intextsep]
+\begin{minipage}{\linewidth}
+\centering%
+\includegraphics[width=0.5\linewidth,clip=]{images/senzor_UZV.png}%
+\figcaption{Shema spajanja ultrazvučnih senzora (HC-SR04)}%
+\label{fig:xfce}%
+\end{minipage}
+\\[\intextsep]
+\newline
+\\[\intextsep]
+\begin{minipage}{\linewidth}
+\centering%
+\includegraphics[width=0.8\linewidth,clip=]{images/puls.png}%
+\figcaption{Princip detekcije prepreke ultrazvučnim valovima}%
+\label{fig:xfce}%
+\end{minipage}
+\\[\intextsep]
+Ultrazvučni senzor koristi dva \textit{GPIO} pina jedan kao \textit{Input (Echo)}, a drugi kao \textit{Output (Trig)}.
+Kada se 8 segmentni ultrazvučni val "ispali" iz ultrazvučnog modula. Mjeri se vrijeme koje je potrebno da se val vrati natrag u modul nakon odbijanja od prepreke. S obzirom da je brzina zvuka 317 m/s (zrak), te vrijeme koje je bilo potrebno da se zvuk vrati  dolazimo do formule za udaljenost predmeta od senzora.
+\newline
+
+Udaljenost je veća od stvarne jer zvuk prevali dvostruki put, od senzora do prepreke i od prepreke do senzora, koje su jednake. S obzirom da je od zanimacije samo udaljenost između senzora i predmeta, rezultat se podijelio sa 2.
+Formula za izračun udaljenosti bi bila
+${Udaljenost=(vrijeme * brzina zvuka)/2}$
+\newline

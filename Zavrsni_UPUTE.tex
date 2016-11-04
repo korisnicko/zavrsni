@@ -1,0 +1,30 @@
+\documentclass[12pt, a4paper]{article}
+\input{Zavrsni_preamble}
+\begin{document}
+\selectlanguage{croatian}
+\input{Zavrsni_frontmatter} % numeracija i naslovnice
+
+\input{Zavrsni_summary_hr}
+\selectlanguage{english}
+\input{Zavrsni_summary_en}
+\newpage
+
+\selectlanguage{croatian}
+\input{uvod}
+\newpage
+\input{raspberry_pi}
+\newpage
+\input{arduino_uno}
+\newpage
+\input{sheme}
+\newpage
+\input{komunikacija}
+\newpage
+\input{driveri}
+\newpage
+\input{dodatno}
+%\addcontentsline{toc}{section}{\quad Bibliografija}
+\bibliographystyle{amsplain}
+%\bibliographystyle{amsalpha}
+\bibliography{Zavrsni_literatura.bib}
+\end{document}

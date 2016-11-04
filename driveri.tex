@@ -1,0 +1,96 @@
+\section{Upravljački programi}
+
+S obzirom da su na \textit{Raspberry Pi} spojeni ultrazvučni senzori i servo motor, a na \textit{Arduino Uno} su spojeni koračni motori; trebalo je napisati upravljačke programe za spojene komponetne. Upravljački programi na \textit{Raspberry Pi} pločici su napisani u Pythonu. Program je koncipiran tako da je napravljena bazna klasa \textit{Device} koja koristi za inicijallizaciju GPIO pinova na \textit{Raspberry Pi} pločici. Ispis klase \textit{Device} je prikazan dolje.
+
+\begin{lstlisting}[caption={Klasa \textit{Device}  (\textit{Raspberry Pi})}, xleftmargin=.75in, label=program]
+import sys
+from tabulate import tabulate
+import RPi.GPIO as GPIO
+
+class Device:
+	lista=[]
+	NAME=""
+	PINS=[]
+
+
+	def __init__(self,PinList,name):
+		GPIO.setmode(GPIO.BCM)
+		self.NAME=name
+		lst=[]
+		for pin in PinList:
+			self.PINS.append(pin)
+			a=[]
+			self.lista.append(pin)
+			a.append(abs(pin))
+			a.append("Initialized")
+			
+			if pin > 0:
+				GPIO.setup(pin,GPIO.OUT)
+				GPIO.output(pin,False)
+				a.append("OUT")
+			elif pin < 0:
+				pin=abs(pin)
+				GPIO.setup(pin,GPIO.IN)
+				a.append("IN")
+			lst.append(a)
+		
+		print tabulate(lst, headers=['Pin','Status',Value']
+\end{lstlisting}
+
+Napisana klasa u konstruktor prima listu pinova koje je potrebno inicijalizirati, kako bi se razaznalo koji pinovi su izlazni, a koji ulazni koristili su se pozitivne i negativne cjelobrojne vrijednosti; gdje su one negativne predstavljale ulaze, a one pozitivne predstavljale izlaze. Također u konstruktoru se napravi tablica sa kratkim pregledom koji pinovi su inicijalizirani, da li su ulazni ili izlazni; i ukoliko su izlazni da li su postavljeni u stanje logičke nule ili u stanje logičke jedinice. U ovom slučaju svi izlazni pinovi su postavljeni u stanje logičke nule.
+
+Klasa \textit{Device} koristi \textit{RPi.GPIO} modul kojeg smo nazvali GPIO. Taj \textit{Python} modul nam omogućava rad sa GPIO pinovima. U njemu se nalaze funkcije koje su se koristile za realizaciju projekta: \textit{GPIO.setmode(), GPIO.setup()}... i druge funkcije; koje će se pojasniti u ostalim poglavljima. U tablici se nalazi opis što koja od navedenih funkcija radi, koje parametre prima, te koje povratne vrijednosti vraća.
+
+\begin{center}
+    \begin{tabular}{ | l | l | p{5cm} |}
+    \hline
+    Funkcija & Parametri & Opis \\ \hline
+    \textit{setmode()} &\textit{numbering\_system} &Funkcija koja postavlja shemu numeracije pinova na osnovu parametra \textit{numbering\_system} koji može biti \textit{GPIO.BCM ili GPIO.BOARD}\\
+    \hline
+    \textit{setup()} &\textit{channel, IN\_OUT} &Funkcija koja postavlja određeni pin u određeni mod rada. Parametar \textit{channel} kaže koji pin, a parametar \textit{IN\_OUT} kaže dali se radi o Ulazu ili Izlazu\\
+    \hline
+    \textit{output()} &\textit{channel, LOW\_HIGH} &Funkcija koja postavlja određeni pin u stanje logičke nule ili u stanje logičke jedinice. Parametar \textit{channel} kaže koji pin, a parametar \textit{LOW\_HIGH} kaže koja je vrijednost, \textit{True} odgovara logičkoj jedinici, a \textit{False} odgovara logičkoj nuli.\\
+    \hline
+    \end{tabular}
+\end{center}
+
+\newpage
+\subsection{Upravljački program za ultrazvučni senzor HC-SR04}
+Upravljački program za ultrazvučni senzor HC-SR04 je napisan kao izvedena klasa \textit{UltrasSound} koja je nasljedila baznu klasu \textit{Device}. Na sljedećem ispisu se vidi izgled klase \textit{UltraSound}.
+
+\begin{lstlisting}[caption={Klasa \textit{UltraSound}  (\textit{Raspberry Pi})}, xleftmargin=.75in, label=program]
+from DeviceClass import Device
+import time
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
+
+class UltraSound(Device):
+	TRIG=0
+	ECHO=0
+	
+	def __init__(self,lista,name):
+		Device.__init(self,lista,name)
+		self.TRIG(abs(lista[0]))
+		self.ECHO(abs(lista[1]))
+		time.sleep(2)
+	
+	def measure(self):
+		GPIO.output(self.TRIG,True)
+		time.sleep(0.00005)
+		GPIO.output(self.TRIG,False)
+	
+		while GPIO.input(self.ECHO)==0:
+			pulse_start=time.time()
+		while GPIO.input(self.ECHO)==1:
+			pulse_end=time.time()
+
+		pulse_duration=pulse_end - pulse_start
+		distance=pulse_duration * 17150
+	
+		return distance
+\end{lstlisting}
+
+Klasa \textit{Ultrasound} sadrži konstruktor koji poziva kontruktor bazne klase \textit{Device} i prosljeđuje joj parametre koje je konstruktor izvedene klase \textit{UltraSound} primio. Sadržava i dva podatkovna člana \textit{TRIG} i \textit{ECHO}, u koje će se spremiti vrijednosti pozicije pinova, podatkovni član \textit{TRIG} kaže koji pin će se koristiti za "ispucavanje" signala, a podatkovni član \textit{ECHO} kaže koji pin će se koristiti za osluškivanje odbijenog signala.
+
+Također sadrži i funkciju \textit{measure()} koja se koristi kako bi se izmjerila udaljenost između prepreke i senzora. Funkcija radi na način, da se za vrijednost pina koji se spremio u podatkovni član \textit{TRIG} njegovo stanje prebaci u logičku jedinicu i na taj način senzor generira ultrazvučni val. Nakon kratkog vremena stanje tog istog pina se prebaci u logičku nulu. Sljedeće što se napravilo je bilo osluškivanje odbijenog zvučnog signala, to se ostvarilo preko proteknutog vremena koje je potrebno da se signal vrati do senzora. To se postiže preko funkcije \textit{GPIO.input()} koja nam kaže da li je na nekom od pinova došao nekakav "ulaz". Tu se mjeri vrijeme od "ispaljenja" signala do njegova povratka, te se preko formule za brzinu dođe do udaljenosti. Broj 17150 s kojim se množi vrijeme je nastao posljedicom sređivanja formule i pretvorbe km/h u cm/s; i kao takvog dijeljenog s dva. Princip detekcije udaljenosti je pojašnjen u poglavlju o ultrazvučnom senzoru HC-SR04.

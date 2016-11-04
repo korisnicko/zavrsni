@@ -1,0 +1,29 @@
+\section{Arduino Uno}
+\textit{Arduino Uno} je programabilni mikrokontroler baziran na ATmega328P\footnote{Jednoprocesorski mikrokontroler proizveden od strane Atmela}. Posjeduje četrnaest digitalnih ulazno/izlaznih pinova, šest analognih pinova, naponske pinove, te USB konekciju \footnote{MASTER SLAVE}. Na sljedećoj slici je prikazana \texit{Arduino Uno} pločica.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/arduino.png}
+    \caption{Mikrokontroler \textit{Arduino Uno}}
+    \label{fig:mesh1}
+\end{figure}
+
+Za programiranje kontrolera koristio se Arduino IDE, razvojno okruženje otvorenog koda; koji olakšava pisanje koda i prebacivanje koda na kontroler.\\
+
+Izgled osnovnog programa za Arduiono je sljedeći:\\
+
+
+\begin{lstlisting}[caption={Struktura Arduino programa}, label=program]
+void setup() {
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+}
+\end{lstlisting}\\
+
+
+Programi za \textit{Arduino Uno} su podijeljeni u dvije funkcije prototipa \textit{void}. U prvoj funkciji \textit{void setup()} se kreiraju i inicijaliziraju varijable. Ova funkcija se poziva samo jednom prilikom startanja \textit{Arduino Uno} kontrolera. Druga funkcija \textit{void loop()} je funkcija koja se repetitivno ponavlja tokom rada kontrolera. Detaljniji rad programa za \texit{Arduino Uno} će biti pojašnjeno u DRIVERI ARDUINO.
+

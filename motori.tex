@@ -1,0 +1,14 @@
+\subsection{Koračni motori i modul ULN2003}
+
+Kako bi se robot mogao pogoniti iskorištena su dva koračna motora; te su postavljena na prva kola kao prednji pogon. Koračni motor je odabran iz razloga, jer se može kontrolirati koliko će se stupnjeva zakrenuti u kojem smjeru; kolikom brzinom. Na svakom kolu se nalazi po jedan motor; na taj način se omogućila potpuna kontrola prilikom vožnje unaprijed, unatrag; te kod skretanja lijevo i skretanja desno. Na sljedećoj slici je prikazana shema spajanja motora. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/motori.png}
+    \caption{Shema spajanja motora sa \textit{Arduino Uno}-om}
+    \label{fig:mesh1}
+\end{figure} 
+
+S obzirom da su se koristili \textit{Arduino} pinovi, kojima su napon i jakost struje premali za pogonjenje motora, nadodan je još i sklop koji će pojačavati signal određenog pina. U suštini taj sklop sadrži takozvani Darliingtonov tranzistor koji je zadužen da na temelju ulazne vrijednosti određenog digitalnog pina propušta dodatno napajanje do motora. Npr. ukoliko je digitalni pin broj 10 postavljen u logičku jedinicu, tada ULN 2003 propušta dopunsko napajenje na izlaz 1. \\
+Princip rada motora može se vidjeti u dodacima na slici 1.
+

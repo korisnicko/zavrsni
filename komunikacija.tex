@@ -1,0 +1,47 @@
+\section{Serijska komunikacija}
+
+Za komunikaciju i realizaciju strukture podređeni-nadređeni, u kojoj je \textit{Arduino Uno} podređeni, a \textit{Raspberry Pi} nadređeni, koristio se USB kabel. Kako bi komunikacija mogla započeti potrebno je napisati programe za \textit{Raspberry Pi} u Python-u i za \textit{Arduino Uno} u Arduinu.
+
+Program koji će se pokretati na \textit{Raspbery Pi} pločici je napisan u \textit{Pythonu} te koristi biblioteku \textit{serial}.\\
+
+Prije samog pisanja programa saznalo se koje sučelje se koristi za komunikaciju, odnosno koji je USB \textit{port} zauzet. To se postiže sljedećom Linux naredbom:\\
+\\
+\begin{lstlisting}[caption={Naredba za izlist priključenih uređaja (\textit{Raspberry Pi})}, xleftmargin=.75in, label=program]
+ls /dev/tty*
+\end{lstlisting}
+
+
+Tu se saznaje koji je \textit{port} zauzet i u odnosu na njega program za slanje poruka serijskim putem je sljedeći:
+
+\begin{lstlisting}[caption={Program za slanje poruka serijskim putem (\textit{Raspberry Pi})}, xleftmargin=.65in, label=program]
+import serial
+ser = serial.Serial('/dev/ttyACM0', 9600)
+ser.write('3')
+\end{lstlisting}
+\\
+Tu se koristila \textit{Python} biblioteka \textit{serial} koja sadrži klasu \textit{Serial}. Konstruktor te klase kao parametre prima razne vrijednosti kao što su: \textit{port, baudrate, bytesize, timeout...}.\\
+No u ovom slučaju polslana su dva parametra \textit{port} i \textit{baudrate}. Vrijednost parametra \textit{port} u ovom slučaju je '/dev/ttyACM0' tipa \textit{string}; a vrijednost parametra \textit{baudrate} je 9600 tipa \textit{integer}.
+Varijabla \textit{baudrate} kaže kolika je brzina prijenosa podataka. Brzina prijenosa podataka mjeri se u \textbf{\textit{baud}}-ovima. Kod digitalnih prijenosa podataka jedan \textbf{\textit{baud}} odgovara jednoj \textbf{\textit{bit/s}}.
+Tako da je brzina prijenosa podataka 9600 \textbf{\textit{bit/s}}.\\
+\\
+Analogno postavljanju \textit{Raspberry Pi} pločice za serijsku komunikaciju; odnosno slanje poruka preko serijskog \textit{port}-a, isto tako se postavio \textit{Arduino Uno} mikrokontroler kao "slušač" poslanih poruka.\\
+Za programiranje \textit{Arduino Uno} mikrokontrolera koristilo se \textit{Arduino} razvojno okruženje.
+Razvojno okruženje \textit{Arduino} zasnovano je na programskom jeziku \textit{Processing}, koji podržava \textit{C} i \textit{C++} programske jezike. U Dodatcimana slici 2. je prikazan izgled \textit{Arduino} razvojnog okruženja. \\
+\textit{Arduino IDE} se koristi kako bi se programirali mokrokontroleri, odnosno daju mogućnost kontroliranja Ulazno/Izlaznih pinova. Ovo razvojno okruženje je projekt otvorenog koda. 
+\newpage
+U \textit{Arduino} razvojnom okruženju je napisan sljedeći program koji je omogućio osluškivanje serijskog priključka dali postoji poslana poruka.
+
+\begin{lstlisting}[caption={Program za primanje poruka serijskim putem (\textit{Arduino Uno})}, xleftmargin=.60in, label=program]
+int message;
+void setup(){
+    message=0;
+    Serial.begin(9600);
+}
+
+void loop(){
+    Dword=Serial.read();
+}
+\end{lstlisting}
+
+Na taj način je ostvarena jednosmjerna komunikacija između \textit{Raspberry Pi} pločice i \textit{Arduino Uno} mikrokontrolera serijskim putem. Tako da \textit{Raspberry Pi} šalje poruku, a \textit{Arduino Uno} prima poruku. Program na \textit{Arduino Uno} mikrokontroleru interpretira poruku i u skladu s njom izvršava određene dijelove koda; određene kontrolom toka programa. S obzirom da su poruke koje \textit{Raspberry Pi} šalje veličine jednog bajta postoji 256 različitih poruka koje se mogu poslati. Poruke koje šalju s \textit{Raspberry Pi} pločice su tipa \textbf{\textit{char}}.
+
